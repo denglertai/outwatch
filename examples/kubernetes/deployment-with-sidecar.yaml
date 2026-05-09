@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-app-with-outwatch
+  namespace: outwatch-example
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: java-app-with-outwatch
+  template:
+    metadata:
+      labels:
+        app: java-app-with-outwatch
+    spec:
+      containers:
+        - name: app
+          image: eclipse-temurin:21-jre
+          command: ["sh", "-c", "echo Java app placeholder started; tail -f /dev/null"]
+          env:
+            - name: JAVA_TOOL_OPTIONS
+              value: "-Dlogback.configurationFile=/app-config/logback.xml"
+          volumeMounts:
+            - name: generated
+              mountPath: /generated
+              readOnly: true
+            - name: app-logback
+              mountPath: /app-config/logback.xml
+              subPath: logback.xml
+              readOnly: true
+
+        - name: outwatch
+          image: ghcr.io/denglertai/outwatch:latest
+          args:
+            - --input-dir
+            - /config
+            - --output-dir
+            - /generated
+            - --create-output-dir
+            - --log-level
+            - info
+          volumeMounts:
+            - name: outwatch-config
+              mountPath: /config
+              readOnly: true
+            - name: generated
+              mountPath: /generated
+
+      volumes:
+        - name: outwatch-config
+          configMap:
+            name: outwatch-config
+        - name: app-logback
+          configMap:
+            name: app-logback
+        - name: generated
+          emptyDir: {}

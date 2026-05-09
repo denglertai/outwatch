@@ -1,0 +1,38 @@
+services:
+  outwatch:
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+    command:
+      - --input-dir
+      - /config
+      - --output-dir
+      - /generated
+      - --create-output-dir
+      - --log-level
+      - info
+    volumes:
+      - ./config:/config:ro
+      - generated:/generated
+    restart: unless-stopped
+
+  app:
+    image: eclipse-temurin:21-jre
+    command:
+      - sh
+      - -c
+      - |
+        echo "Java app placeholder started";
+        echo "Mount your app and use /app-config/logback.xml";
+        tail -f /dev/null
+    environment:
+      JAVA_TOOL_OPTIONS: "-Dlogback.configurationFile=/app-config/logback.xml"
+    volumes:
+      - ./app/logback.xml:/app-config/logback.xml:ro
+      - generated:/generated:ro
+    depends_on:
+      - outwatch
+    restart: unless-stopped
+
+volumes:
+  generated:

@@ -1,0 +1,11 @@
+.git
+.github
+.gitignore
+.dist
+build
+dist
+*.md
+examples
+memories
+*.out
+coverage.*

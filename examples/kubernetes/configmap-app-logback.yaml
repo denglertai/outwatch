@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-logback
+  namespace: outwatch-example
+data:
+  logback.xml: |
+    <configuration scan="true" scanPeriod="10 seconds">
+      <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+          <pattern>%d %-5level [%thread] %logger - %msg%n</pattern>
+        </encoder>
+      </appender>
+
+      <root level="INFO">
+        <appender-ref ref="STDOUT" />
+      </root>
+
+      <include optional="true" file="/generated/dynamic-loggers.xml" />
+    </configuration>

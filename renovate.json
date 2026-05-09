@@ -1,0 +1,17 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "schedule": [
+    "before 6am on monday"
+  ],
+  "automerge": false,
+  "packageRules": [
+    {
+      "matchManagers": ["gomod", "github-actions"],
+      "groupName": "non-major dependencies",
+      "matchUpdateTypes": ["minor", "patch", "digest"]
+    }
+  ]
+}

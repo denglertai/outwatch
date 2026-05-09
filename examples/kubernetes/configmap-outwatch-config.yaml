@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: outwatch-config
+  namespace: outwatch-example
+data:
+  log-levels.yaml: |
+    target: logback
+    filename: dynamic-loggers.xml
+    logback:
+      loggers:
+        com.example.service: INFO
+        com.example.api: DEBUG
+        org.hibernate.SQL: DEBUG
+        org.springframework.web: INFO
