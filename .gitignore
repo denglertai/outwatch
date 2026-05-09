@@ -24,6 +24,9 @@ profile.cov
 go.work
 go.work.sum
 
+# Exclude generated output directory
+/dist
+
 # env file
 .env
 
