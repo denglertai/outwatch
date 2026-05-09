@@ -1,0 +1,16 @@
+# Code Owners
+
+# Default: all files require review from repository owner
+* @denglertai
+
+# Config parsing changes require careful review
+/internal/config/ @denglertai
+
+# Target renderers require careful review
+/internal/targets/ @denglertai
+
+# Pipeline orchestration is critical
+/internal/pipeline/ @denglertai
+
+# Deployment examples
+/examples/ @denglertai
