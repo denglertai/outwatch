@@ -1,0 +1,5 @@
+FROM mcr.microsoft.com/windows/nanoserver:ltsc2022
+
+WORKDIR C:\\outwatch
+COPY outwatch.exe C:\\outwatch\\outwatch.exe
+ENTRYPOINT ["C:\\outwatch\\outwatch.exe"]
