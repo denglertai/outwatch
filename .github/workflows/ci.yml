@@ -13,8 +13,23 @@ jobs:
         with:
           go-version-file: go.mod
       - name: Test
-        run: go test -coverprofile=coverage.txt ./...
+        run: |
+          go install github.com/jstemmer/go-junit-report/v2@latest
+
+          set +e
+          go test -v -coverprofile=coverage.txt ./... 2>&1 | tee go-test.out
+          test_exit=${PIPESTATUS[0]}
+          set -e
+
+          "$(go env GOPATH)/bin/go-junit-report" < go-test.out > junit.xml
+          exit ${test_exit}
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          files: ./junit.xml
           token: ${{ secrets.CODECOV_TOKEN }}
