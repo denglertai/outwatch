@@ -3,7 +3,7 @@ name: Release
 "on":
   push:
     tags:
-      - "*"
+      - "v*.*.*"
 
 permissions:
   contents: write
@@ -106,6 +106,16 @@ jobs:
           tags: |
             type=raw,value=${{ github.ref_name }}
             type=raw,value=latest
+
+      - name: Build image for smoke test
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          load: true
+          tags: outwatch-smoke:${{ github.ref_name }}
+
+      - name: Smoke test container
+        run: docker run --rm outwatch-smoke:${{ github.ref_name }} --version
 
       - name: Build and push image
         uses: docker/build-push-action@v7

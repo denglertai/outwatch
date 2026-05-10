@@ -23,6 +23,12 @@ jobs:
 
           "$(go env GOPATH)/bin/go-junit-report" < go-test.out > junit.xml
           exit ${test_exit}
+      - name: Race test
+        run: go test -race ./...
+      - name: Vulnerability scan
+        run: |
+          go install golang.org/x/vuln/cmd/govulncheck@latest
+          "$(go env GOPATH)/bin/govulncheck" ./...
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v6
         with:
