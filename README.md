@@ -27,9 +27,9 @@ V1 target: Logback XML.
 target: logback
 filename: application-logback.xml
 logback:
-	loggers:
-		com.example.service: INFO
-		org.hibernate.SQL: DEBUG
+  loggers:
+    com.example.service: INFO
+    org.hibernate.SQL: DEBUG
 ```
 
 Rules:
@@ -74,12 +74,12 @@ Example input file (`configs/log-levels.yaml`):
 target: logback
 filename: dynamic-loggers.xml
 logback:
-	loggers:
-		com.example.service: INFO
-		com.example.api: DEBUG
-		com.example.repository: WARN
-		org.hibernate.SQL: DEBUG
-		org.springframework.web: INFO
+  loggers:
+    com.example.service: INFO
+    com.example.api: DEBUG
+    com.example.repository: WARN
+    org.hibernate.SQL: DEBUG
+    org.springframework.web: INFO
 ```
 
 Run outwatch in watch mode:
@@ -134,7 +134,7 @@ Note:
 Run all tests:
 
 ```bash
-go test ./...
+make test
 ```
 
 ## Deployment Examples
@@ -152,7 +152,13 @@ Quick links:
 Build the project image from the repository root:
 
 ```bash
-docker build -t outwatch:latest .
+make image-build
+```
+
+Build without cache:
+
+```bash
+make image-build-no-cache
 ```
 
 Run the container:
@@ -188,7 +194,9 @@ Project automation targets are available in `Makefile`:
 make help
 make test
 make build
+make clean
 make image-build
+make image-build-no-cache
 ```
 
 **Local testing targets:**
@@ -204,6 +212,21 @@ Common overrides:
 ```bash
 make image-build IMAGE=ghcr.io/your-org/outwatch TAG=v0.1.0
 make build BINARY=outwatch-linux-amd64 DIST_DIR=./build
+```
+
+Makefile parameters:
+
+- `BINARY` (default: `outwatch`): output binary name for `make build`.
+- `CMD_PATH` (default: `./cmd/outwatch`): Go package path used as the build entrypoint.
+- `DIST_DIR` (default: `./dist`): output directory for build artifacts.
+- `IMAGE` (default: `outwatch`): container image repository/name used by image build targets.
+- `TAG` (default: `latest`): container image tag used by image build targets.
+
+Parameterized examples:
+
+```bash
+make build CMD_PATH=./cmd/outwatch BINARY=outwatch-linux-arm64 DIST_DIR=./build
+make image-build IMAGE=ghcr.io/your-org/outwatch TAG=v0.1.0
 ```
 
 ## CI and Dependency Updates
