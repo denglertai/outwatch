@@ -209,6 +209,7 @@ make build BINARY=outwatch-linux-amd64 DIST_DIR=./build
 ## CI and Dependency Updates
 
 - CI runs tests on every push and pull request: `.github/workflows/ci.yml`.
+- CI also runs `go test -race ./...` and `govulncheck ./...` for additional runtime and dependency safety checks.
 - Renovate config is included in `renovate.json`:
 	- Weekly schedule.
 	- Grouped non-major updates for Go modules and GitHub Actions.
