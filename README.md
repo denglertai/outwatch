@@ -1,5 +1,8 @@
 # outwatch
 
+[![CI](https://github.com/denglertai/outwatch/actions/workflows/ci.yml/badge.svg)](https://github.com/denglertai/outwatch/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/denglertai/outwatch/graph/badge.svg)](https://codecov.io/gh/denglertai/outwatch)
+
 Outwatch watches a directory of YAML configuration files and generates structured outputs through an extensible target architecture.
 
 V1 target: Logback XML.
