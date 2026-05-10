@@ -16,6 +16,13 @@ help:
 	@echo "  test-docker-setup      Create ./generated directory with correct permissions"
 	@echo "  test-docker-up         Start Docker Compose example with correct setup"
 	@echo "  test-docker-down       Stop Docker Compose example"
+	@echo ""
+	@echo "Parameters (override with VAR=value):"
+	@echo "  BINARY=$(BINARY)       Output binary name for build target"
+	@echo "  CMD_PATH=$(CMD_PATH)   Go package path used as build entrypoint"
+	@echo "  DIST_DIR=$(DIST_DIR)   Output directory for build artifacts"
+	@echo "  IMAGE=$(IMAGE)         Container image repository/name"
+	@echo "  TAG=$(TAG)             Container image tag"
 
 test:
 	go test -coverprofile=coverage.txt ./...
