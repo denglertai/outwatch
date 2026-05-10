@@ -6,7 +6,7 @@
 
 **Primary Use Case:** Transform mounted ConfigMaps or filesystem config files into application-specific formats (starting with Logback XML for dynamic log level management).
 
-## What Has Been Built (v0.1.0)
+## What Has Been Built (v0.2.0)
 
 ### Core Runtime
 - **Config Parser** (`internal/config/`): YAML parsing with strict validation, schema enforcement, source path tracking
@@ -237,7 +237,7 @@ docker-compose up
 
 ---
 
-**Last Updated:** May 9, 2026  
-**Current Version:** v0.1.0  
+**Last Updated:** May 10, 2026  
+**Current Version:** v0.2.0  
 **Go Version:** 1.26  
 **License:** See LICENSE file

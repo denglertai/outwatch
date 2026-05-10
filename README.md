@@ -63,7 +63,7 @@ Example version output:
 
 ```bash
 outwatch --version
-# outwatch version=v0.1.0 commit=abc123... buildDate=2026-05-09T12:00:00Z
+# outwatch version=v0.2.0 commit=abc123... buildDate=2026-05-10T12:00:00Z
 ```
 
 ## Complete Example Config
@@ -210,7 +210,7 @@ make test-docker-down       # Stop Docker Compose example
 Common overrides:
 
 ```bash
-make image-build IMAGE=ghcr.io/your-org/outwatch TAG=v0.1.0
+make image-build IMAGE=ghcr.io/your-org/outwatch TAG=v0.2.0
 make build BINARY=outwatch-linux-amd64 DIST_DIR=./build
 ```
 
@@ -226,7 +226,7 @@ Parameterized examples:
 
 ```bash
 make build CMD_PATH=./cmd/outwatch BINARY=outwatch-linux-arm64 DIST_DIR=./build
-make image-build IMAGE=ghcr.io/your-org/outwatch TAG=v0.1.0
+make image-build IMAGE=ghcr.io/your-org/outwatch TAG=v0.2.0
 ```
 
 ## CI and Dependency Updates
