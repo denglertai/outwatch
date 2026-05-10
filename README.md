@@ -170,7 +170,9 @@ The runtime image uses distroless nonroot (`gcr.io/distroless/static-debian12:no
 ## Production Notes
 
 - Run outwatch as a sidecar (Kubernetes) or sibling service (Docker Compose) with shared volume access to generated output.
-- Ensure the output directory is writable by the outwatch runtime user.
+- Ensure the output directory is writable by the outwatch runtime user:
+	- **Kubernetes:** Use `securityContext.fsGroup: 0` on the Pod to make volumes group-writable without running as root.
+	- **Docker Compose:** Use bind mounts with proper host directory permissions (e.g., `mkdir -p ./generated && chmod 777 ./generated`). See [examples/docker/README.md](./examples/docker/README.md).
 - Invalid config updates are logged and ignored; the last valid generated output stays in place.
 - Start order should guarantee outwatch can access mounted config and output volumes before first sync.
 - Keep Logback include paths stable and mount generated output consistently across restarts.
@@ -184,6 +186,14 @@ make help
 make test
 make build
 make image-build
+```
+
+**Local testing targets:**
+
+```bash
+make test-docker-setup      # Create ./examples/docker/generated with correct permissions
+make test-docker-up         # Start Docker Compose example
+make test-docker-down       # Stop Docker Compose example
 ```
 
 Common overrides:

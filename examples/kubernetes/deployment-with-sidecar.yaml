@@ -13,6 +13,8 @@ spec:
       labels:
         app: java-app-with-outwatch
     spec:
+      securityContext:
+        fsGroup: 0
       containers:
         - name: app
           image: eclipse-temurin:21-jre

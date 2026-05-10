@@ -26,6 +26,7 @@ go.work.sum
 
 # Exclude generated output directory
 /dist
+examples/docker/generated
 
 # env file
 .env

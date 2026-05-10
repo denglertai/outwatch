@@ -37,3 +37,13 @@ kubectl -n outwatch-example exec deploy/java-app-with-outwatch -c outwatch -- ca
 - Replace `ghcr.io/denglertai/outwatch:latest` with your published image.
 - Replace the `app` container image/command with your real Java application.
 - Update `configmap-outwatch-config.yaml` to change dynamic logger levels.
+
+## Security: fsGroup 0
+
+The deployment uses `securityContext.fsGroup: 0` to allow the non-root outwatch container (UID 65532) to write to the shared `emptyDir` volume:
+
+- **What it does:** Kubernetes dynamically adds GID 0 (root group) to all process supplementary groups, making group-owned volumes writable.
+- **Why:** The distroless image runs as UID 65532 for security; `fsGroup: 0` grants write access without running as root.
+- **Requirement:** Volumes must have group-writable permissions (Kubernetes volume types like `emptyDir` have appropriate defaults).
+
+This pattern is more secure than running containers as root and is the recommended approach for sidecar patterns in Kubernetes.
