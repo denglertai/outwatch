@@ -47,3 +47,23 @@ func TestGroup_ConflictKeepsFirst(t *testing.T) {
 		t.Fatalf("expected first file logger level, got %s", merged.Loggers["a"])
 	}
 }
+
+// TestGroup_Empty_Items verifies empty group returns empty loggers.
+func TestGroup_Empty_Items(t *testing.T) {
+	group := grouping.OutputGroup{
+		Target: "logback",
+		File:   "app.xml",
+		Items:  []config.ParsedOutput{},
+	}
+
+	merged, warnings := Group(group)
+	if len(warnings) != 0 {
+		t.Fatalf("expected no warnings for empty group, got %v", warnings)
+	}
+	if merged.Target != "logback" || merged.File != "app.xml" {
+		t.Fatalf("unexpected target/file: %s/%s", merged.Target, merged.File)
+	}
+	if len(merged.Loggers) != 0 {
+		t.Fatalf("expected empty loggers, got %v", merged.Loggers)
+	}
+}

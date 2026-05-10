@@ -25,3 +25,36 @@ func TestResolvePath_PathSeparatorRejected(t *testing.T) {
 		t.Fatalf("expected error, got %v", err)
 	}
 }
+
+// TestResolvePath_Empty_FileName verifies empty filename is rejected.
+func TestResolvePath_Empty_FileName(t *testing.T) {
+	_, err := ResolvePath("/tmp/out", "")
+	if err == nil {
+		t.Fatal("expected error for empty filename")
+	}
+	if !strings.Contains(err.Error(), "must not be empty") {
+		t.Fatalf("expected empty error, got %v", err)
+	}
+}
+
+// TestResolvePath_Whitespace_Only_FileName verifies whitespace-only filename is rejected.
+func TestResolvePath_Whitespace_Only_FileName(t *testing.T) {
+	_, err := ResolvePath("/tmp/out", "   ")
+	if err == nil {
+		t.Fatal("expected error for whitespace-only filename")
+	}
+	if !strings.Contains(err.Error(), "must not be empty") {
+		t.Fatalf("expected empty error, got %v", err)
+	}
+}
+
+// TestResolvePath_Backslash_Separator verifies backslash is also rejected.
+func TestResolvePath_Backslash_Separator(t *testing.T) {
+	_, err := ResolvePath("/tmp/out", "foo\\bar.xml")
+	if err == nil {
+		t.Fatal("expected error for backslash separator")
+	}
+	if !strings.Contains(err.Error(), "must not contain path") {
+		t.Fatalf("expected path error, got %v", err)
+	}
+}
