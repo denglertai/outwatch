@@ -38,3 +38,16 @@ func TestRegistry_Duplicate(t *testing.T) {
 		t.Fatalf("expected duplicate registration error")
 	}
 }
+
+// TestRegistry_Get_NotFound verifies Get returns error for unregistered target.
+func TestRegistry_Get_NotFound(t *testing.T) {
+	r := NewRegistry()
+
+	_, err := r.Get("nonexistent")
+	if err == nil {
+		t.Fatal("expected error for unregistered target")
+	}
+	if err.Error() != `target "nonexistent" is not registered` {
+		t.Fatalf("unexpected error message: %v", err)
+	}
+}

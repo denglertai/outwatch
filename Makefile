@@ -18,7 +18,7 @@ help:
 	@echo "  test-docker-down       Stop Docker Compose example"
 
 test:
-	go test ./...
+	go test -coverprofile=coverage.txt ./...
 
 build:
 	mkdir -p $(DIST_DIR)

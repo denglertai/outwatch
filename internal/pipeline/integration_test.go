@@ -88,6 +88,77 @@ func TestProcessor_InvalidUpdateKeepsLastValid(t *testing.T) {
 	}
 }
 
+// TestProcessor_InputDirectory_NotExist verifies error when input directory doesn't exist.
+func TestProcessor_InputDirectory_NotExist(t *testing.T) {
+	outputDir := t.TempDir()
+
+	registry := targets.NewRegistry()
+	if err := registry.Register(logback.Renderer{}); err != nil {
+		t.Fatal(err)
+	}
+	proc := NewProcessor("/nonexistent/dir", outputDir, registry, slog.New(slog.NewTextHandler(io.Discard, nil)), true)
+	if err := proc.InitialSync(); err == nil {
+		t.Fatal("expected error for non-existent input directory")
+	}
+}
+
+// TestProcessor_UnknownTarget verifies invalid target config is skipped.
+func TestProcessor_UnknownTarget(t *testing.T) {
+	inputDir := t.TempDir()
+	outputDir := t.TempDir()
+
+	cfgPath := filepath.Join(inputDir, "a.yaml")
+	if err := os.WriteFile(cfgPath, []byte("target: unknowntarget\nfilename: app.xml\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	registry := targets.NewRegistry()
+	if err := registry.Register(logback.Renderer{}); err != nil {
+		t.Fatal(err)
+	}
+	proc := NewProcessor(inputDir, outputDir, registry, slog.New(slog.NewTextHandler(io.Discard, nil)), true)
+	if err := proc.InitialSync(); err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if _, err := os.Stat(filepath.Join(outputDir, "app.xml")); err == nil {
+		t.Fatal("expected no output file for invalid target config")
+	}
+}
+
+// TestProcessor_MultipleValidConfigs verifies multiple configs generating different outputs.
+func TestProcessor_MultipleValidConfigs(t *testing.T) {
+	inputDir := t.TempDir()
+	outputDir := t.TempDir()
+
+	write := func(name, content string) {
+		t.Helper()
+		if err := os.WriteFile(filepath.Join(inputDir, name), []byte(content), 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	write("a.yaml", "target: logback\nfilename: a.xml\nlogback:\n  loggers:\n    com.a: DEBUG\n")
+	write("b.yaml", "target: logback\nfilename: b.xml\nlogback:\n  loggers:\n    com.b: INFO\n")
+	write("c.yaml", "target: logback\nfilename: c.xml\nlogback:\n  loggers:\n    com.c: WARN\n")
+
+	registry := targets.NewRegistry()
+	if err := registry.Register(logback.Renderer{}); err != nil {
+		t.Fatal(err)
+	}
+	proc := NewProcessor(inputDir, outputDir, registry, slog.New(slog.NewTextHandler(io.Discard, nil)), true)
+	if err := proc.InitialSync(); err != nil {
+		t.Fatalf("initial sync: %v", err)
+	}
+
+	for _, f := range []string{"a.xml", "b.xml", "c.xml"} {
+		_, err := os.Stat(filepath.Join(outputDir, f))
+		if err != nil {
+			t.Fatalf("expected output file %s to exist: %v", f, err)
+		}
+	}
+}
+
 // mustRead reads a file or fails the test.
 func mustRead(t *testing.T, path string) string {
 	t.Helper()
