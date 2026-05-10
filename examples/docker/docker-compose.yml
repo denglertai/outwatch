@@ -13,7 +13,7 @@ services:
       - info
     volumes:
       - ./config:/config:ro
-      - generated:/generated
+      - ./generated:/generated
     restart: unless-stopped
 
   app:
@@ -29,10 +29,7 @@ services:
       JAVA_TOOL_OPTIONS: "-Dlogback.configurationFile=/app-config/logback.xml"
     volumes:
       - ./app/logback.xml:/app-config/logback.xml:ro
-      - generated:/generated:ro
+      - ./generated:/generated:ro
     depends_on:
       - outwatch
     restart: unless-stopped
-
-volumes:
-  generated:
